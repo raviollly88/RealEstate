@@ -7,18 +7,22 @@
 <title>Подборщик новостроек — Сочи, Москва, Санкт-Петербург</title>
 <style>
   :root {
-    --bg-light: #f4f6f9;
-    --bg-dark: #0b0f17;
+    --bg-light: #eef2f7;
+    --bg-dark: #090d16;
     --surface-light: #ffffff;
-    --surface-dark: #131a26;
+    --surface-dark: #111827;
     --surface-2-light: #f8fafc;
-    --surface-2-dark: #1a2333;
+    --surface-2-dark: #182234;
     --text-light: #0f172a;
     --text-dark: #f1f5f9;
     --muted-light: #475569;
     --muted-dark: #94a3b8;
     --border-light: #cbd5e1;
-    --border-dark: #2c394f;
+    --border-dark: #283548;
+    --grid-light: rgba(15, 23, 42, .055);
+    --grid-dark: rgba(148, 163, 184, .06);
+    --glow-light: rgba(37, 99, 235, .10);
+    --glow-dark: rgba(96, 165, 250, .14);
     --brand-light: #1d4ed8;
     --brand-dark: #60a5fa;
     --brand-text-light: #ffffff;
@@ -31,6 +35,8 @@
     --warn-dark: #fbbf24;
     --warn-bg-light: #fef3c7;
     --warn-bg-dark: #2d1b04;
+    --over-light: #b91c1c;
+    --over-dark: #f87171;
 
     --bg: var(--bg-light);
     --surface: var(--surface-light);
@@ -38,12 +44,15 @@
     --text: var(--text-light);
     --muted: var(--muted-light);
     --border: var(--border-light);
+    --grid: var(--grid-light);
+    --glow: var(--glow-light);
     --brand: var(--brand-light);
     --brand-text: var(--brand-text-light);
     --ok: var(--ok-light);
     --ok-bg: var(--ok-bg-light);
     --warn: var(--warn-light);
     --warn-bg: var(--warn-bg-light);
+    --over: var(--over-light);
 
     @media (prefers-color-scheme: dark) {
       --bg: var(--bg-dark);
@@ -52,12 +61,15 @@
       --text: var(--text-dark);
       --muted: var(--muted-dark);
       --border: var(--border-dark);
+      --grid: var(--grid-dark);
+      --glow: var(--glow-dark);
       --brand: var(--brand-dark);
       --brand-text: var(--brand-text-dark);
       --ok: var(--ok-dark);
       --ok-bg: var(--ok-bg-dark);
       --warn: var(--warn-dark);
       --warn-bg: var(--warn-bg-dark);
+      --over: var(--over-dark);
     }
 
     @supports (color: light-dark(white, black)) {
@@ -67,12 +79,15 @@
       --text: light-dark(var(--text-light), var(--text-dark));
       --muted: light-dark(var(--muted-light), var(--muted-dark));
       --border: light-dark(var(--border-light), var(--border-dark));
+      --grid: light-dark(var(--grid-light), var(--grid-dark));
+      --glow: light-dark(var(--glow-light), var(--glow-dark));
       --brand: light-dark(var(--brand-light), var(--brand-dark));
       --brand-text: light-dark(var(--brand-text-light), var(--brand-text-dark));
       --ok: light-dark(var(--ok-light), var(--ok-dark));
       --ok-bg: light-dark(var(--ok-bg-light), var(--ok-bg-dark));
       --warn: light-dark(var(--warn-light), var(--warn-dark));
       --warn-bg: light-dark(var(--warn-bg-light), var(--warn-bg-dark));
+      --over: light-dark(var(--over-light), var(--over-dark));
     }
 
     color-scheme: light dark;
@@ -83,19 +98,31 @@
 
   body {
     margin: 0;
+    min-height: 100vh;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: var(--bg);
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 420px at 15% -5%, var(--glow), transparent 70%),
+      radial-gradient(ellipse 700px 380px at 85% 10%, var(--glow), transparent 70%),
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
     color: var(--text);
     line-height: 1.5;
   }
 
   .wrap {
-    max-width: 880px;
+    max-width: 1240px;
     margin: 0 auto;
-    padding: 2rem 1rem 3rem;
+    padding: 2rem 1.25rem 3.5rem;
   }
 
   header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
     margin-bottom: 1.5rem;
   }
 
@@ -106,12 +133,12 @@
     letter-spacing: .06em;
     text-transform: uppercase;
     color: var(--brand);
-    margin-bottom: .35rem;
+    margin-bottom: .3rem;
   }
 
   h1 {
-    margin: 0 0 .4rem;
-    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    margin: 0 0 .35rem;
+    font-size: clamp(1.65rem, 3vw, 2.2rem);
     letter-spacing: -.02em;
   }
 
@@ -121,18 +148,47 @@
     font-size: .95rem;
   }
 
+  .limit-badge {
+    font-size: .84rem;
+    font-weight: 600;
+    padding: .45rem .85rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+  }
+
+  .limit-badge strong { color: var(--text); }
+
+  .layout {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  @media (min-width: 940px) {
+    .layout {
+      grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr);
+    }
+    .sidebar {
+      position: sticky;
+      top: 1.25rem;
+    }
+  }
+
   .panel {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 1.25rem;
-    box-shadow: 0 6px 24px -12px rgba(15, 23, 42, .18);
+    box-shadow: 0 8px 28px -14px rgba(15, 23, 42, .18);
   }
 
   form {
     display: grid;
     gap: .9rem;
-    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     align-items: end;
   }
 
@@ -207,7 +263,7 @@
     align-items: baseline;
     flex-wrap: wrap;
     gap: .5rem;
-    margin: 1.5rem 0 .75rem;
+    margin: 1.35rem 0 .75rem;
   }
 
   .results-head h2 {
@@ -342,10 +398,93 @@
   .empty {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.2rem;
-    color: var(--muted);
+    border-radius: 16px;
+    padding: 1.35rem;
   }
+
+  .empty h3 {
+    margin: 0 0 .4rem;
+    font-size: 1.05rem;
+  }
+
+  .empty p {
+    margin: 0;
+    color: var(--muted);
+    font-size: .92rem;
+  }
+
+  .sidebar {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .side-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.1rem 1.15rem;
+  }
+
+  .side-card h3 {
+    margin: 0 0 .75rem;
+    font-size: 1rem;
+  }
+
+  .city-stats {
+    display: grid;
+    gap: .55rem;
+  }
+
+  .city-btn {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    padding: .65rem .8rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .city-btn[aria-pressed="true"] {
+    border-color: var(--brand);
+    box-shadow: inset 0 0 0 1px var(--brand);
+  }
+
+  .city-btn-name { font-weight: 700; font-size: .92rem; }
+  .city-btn-sub { font-size: .78rem; color: var(--muted); }
+  .city-btn-med { font-weight: 700; font-size: .88rem; color: var(--brand); white-space: nowrap; }
+
+  .overview-list {
+    display: grid;
+    gap: .5rem;
+  }
+
+  .ov-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: .6rem;
+    padding: .5rem .65rem;
+    border-radius: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: .84rem;
+  }
+
+  .ov-name { font-weight: 600; }
+  .ov-sub { font-size: .76rem; color: var(--muted); }
+  .ov-right { text-align: right; white-space: nowrap; }
+  .ov-cost { font-weight: 700; }
+  .ov-tag { font-size: .74rem; font-weight: 600; }
+  .ov-tag.ok { color: var(--ok); }
+  .ov-tag.warn { color: var(--warn); }
+  .ov-tag.over { color: var(--over); }
 
   .foot-note {
     margin-top: 1.5rem;
@@ -354,7 +493,7 @@
   }
 
   @media (forced-colors: active) {
-    .panel, .card, .rank, .pill, .status, .chip, .btn-primary, input, select {
+    .panel, .card, .side-card, .city-btn, .ov-item, .rank, .pill, .status, .chip, .btn-primary, input, select {
       border: 1px solid CanvasText;
     }
     .btn-primary {
@@ -367,46 +506,65 @@
 <body>
 <div class="wrap">
   <header>
-    <span class="eyebrow">AI-исследование рынка новостроек · Трек А</span>
-    <h1>Подборщик жилых комплексов</h1>
-    <p class="subtitle">15 ЖК бизнес- и премиум-класса в Сочи, Москве и Санкт-Петербурге (цены «от» на 23.11.2026)</p>
+    <div>
+      <span class="eyebrow">AI-исследование рынка новостроек · Трек А</span>
+      <h1>Подборщик жилых комплексов</h1>
+      <p class="subtitle">15 ЖК бизнес- и премиум-класса в Сочи, Москве и Санкт-Петербурге (цены «от» на 23.11.2026)</p>
+    </div>
+    <div class="limit-badge">Порог превышения бюджета: <strong>до +2 000 000 ₽</strong></div>
   </header>
 
-  <section class="panel" aria-label="Параметры подбора">
-    <form id="f">
-      <label>Город
-        <select id="city" required>
-          <option value="Сочи">Сочи</option>
-          <option value="Москва">Москва</option>
-          <option value="Санкт-Петербург">Санкт-Петербург</option>
-        </select>
-      </label>
-      <label>Бюджет, ₽
-        <input id="budget" type="number" min="1000000" step="500000" value="30000000" required>
-      </label>
-      <label>Площадь, м²
-        <input id="area" type="number" min="10" max="1000" step="0.5" value="60" required>
-      </label>
-      <button class="btn-primary" type="submit">Подобрать 3 ЖК</button>
-    </form>
+  <div class="layout">
+    <main>
+      <section class="panel" aria-label="Параметры подбора">
+        <form id="f">
+          <label>Город
+            <select id="city" required>
+              <option value="Сочи">Сочи</option>
+              <option value="Москва">Москва</option>
+              <option value="Санкт-Петербург">Санкт-Петербург</option>
+            </select>
+          </label>
+          <label>Бюджет, ₽
+            <input id="budget" type="number" min="1000000" step="500000" value="30000000" required>
+          </label>
+          <label>Площадь, м²
+            <input id="area" type="number" min="10" max="1000" step="0.5" value="60" required>
+          </label>
+          <button class="btn-primary" type="submit">Подобрать 3 ЖК</button>
+        </form>
 
-    <div class="presets">
-      <span>Быстрые сценарии:</span>
-      <button type="button" class="chip" data-city="Сочи" data-budget="30000000" data-area="60">Сочи · 30 млн · 60 м²</button>
-      <button type="button" class="chip" data-city="Москва" data-budget="100000000" data-area="40">Москва · 100 млн · 40 м²</button>
-      <button type="button" class="chip" data-city="Санкт-Петербург" data-budget="40000000" data-area="70">СПб · 40 млн · 70 м²</button>
-    </div>
-  </section>
+        <div class="presets">
+          <span>Быстрые сценарии:</span>
+          <button type="button" class="chip" data-city="Сочи" data-budget="30000000" data-area="60">Сочи · 30 млн · 60 м²</button>
+          <button type="button" class="chip" data-city="Москва" data-budget="100000000" data-area="40">Москва · 100 млн · 40 м²</button>
+          <button type="button" class="chip" data-city="Санкт-Петербург" data-budget="40000000" data-area="70">СПб · 40 млн · 70 м²</button>
+        </div>
+      </section>
 
-  <div class="results-head">
-    <h2>Подходящие варианты</h2>
-    <div id="meta" class="results-meta"></div>
+      <div class="results-head">
+        <h2>Подходящие варианты</h2>
+        <div id="meta" class="results-meta"></div>
+      </div>
+      <div id="out" class="cards" aria-live="polite"></div>
+
+      <p class="foot-note">
+        Стоимость примерная: цена «от» за м² × желаемая площадь. Варианты дороже бюджета более чем на 2 000 000 ₽ скрыты.
+      </p>
+    </main>
+
+    <aside class="sidebar" aria-label="Сводка по рынку">
+      <section class="side-card">
+        <h3>Медианы по городам</h3>
+        <div id="cityStats" class="city-stats"></div>
+      </section>
+
+      <section class="side-card">
+        <h3 id="ovTitle">Все ЖК города</h3>
+        <div id="overview" class="overview-list"></div>
+      </section>
+    </aside>
   </div>
-  <div id="out" class="cards" aria-live="polite"></div>
-
-  <p class="foot-note">
-    Стоимость примерная: рассчитывается как цена «от» за м² × желаемая площадь. Реальная цена лота зависит от этажа, вида, планировки и отделки.
-  </p>
 </div>
 
 <script>
@@ -427,6 +585,7 @@ const CSV = `city,name,developer,district,class,price_per_m2_from,delivery,sourc
 Санкт-Петербург,Avant,Холдинг AAG,Петроградский,премиум,628725,2026-2027,https://zhk-avant-spb-i.cian.ru/,2026-11-23,23.5,132.9,Цена по ЦИАН,0
 Санкт-Петербург,Акватория,ГК ПСК,Выборгский,премиум,449280,2 кв. 2029,https://zhk-akvatoriya-spb-i.cian.ru/,2026-11-23,35,150,"Цена по ЦИАН; площади ориентировочные (оценка 35-150 м2, не из источника)",1
 `;
+const MAX_OVER_BUDGET = 2_000_000;
 
 function parseCSV(text) {
   const rows = []; let row = [], cur = "", q = false;
@@ -450,11 +609,19 @@ const data = parseCSV(CSV).map(r => ({
 }));
 
 const rub = n => Math.round(n).toLocaleString("ru-RU") + " ₽";
+const mln = n => (n / 1e6).toFixed(1).replace(".", ",") + " млн ₽";
+
+function median(arr) {
+  const s = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
 
 function pick(city, budget, area, k = 3) {
   const res = data
     .filter(c => c.city === city && (c.min === null || area >= c.min) && (c.max === null || area <= c.max))
-    .map(c => ({ c, cost: c.price * area, inBudget: c.price * area <= budget }));
+    .map(c => ({ c, cost: c.price * area, inBudget: c.price * area <= budget }))
+    .filter(m => m.cost <= budget + MAX_OVER_BUDGET);
   const inside = res.filter(m => m.inBudget).sort((a, b) => (budget - a.cost) - (budget - b.cost));
   const above = res.filter(m => !m.inBudget).sort((a, b) => a.cost - b.cost);
   return [...inside, ...above].slice(0, k);
@@ -464,6 +631,49 @@ const form = document.getElementById("f");
 const cityEl = document.getElementById("city");
 const budgetEl = document.getElementById("budget");
 const areaEl = document.getElementById("area");
+
+function renderSidebar(activeCity, budget, area) {
+  const cities = ["Сочи", "Москва", "Санкт-Петербург"];
+  const statsEl = document.getElementById("cityStats");
+  statsEl.replaceChildren();
+  cities.forEach(ct => {
+    const prices = data.filter(d => d.city === ct).map(d => d.price);
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "city-btn";
+    btn.setAttribute("aria-pressed", String(ct === activeCity));
+    btn.innerHTML = `<div><div class="city-btn-name"></div><div class="city-btn-sub"></div></div><div class="city-btn-med"></div>`;
+    btn.querySelector(".city-btn-name").textContent = ct;
+    btn.querySelector(".city-btn-sub").textContent = `от ${rub(Math.min(...prices))}/м²`;
+    btn.querySelector(".city-btn-med").textContent = `${rub(median(prices))}/м²`;
+    btn.addEventListener("click", () => {
+      cityEl.value = ct;
+      form.requestSubmit();
+    });
+    statsEl.append(btn);
+  });
+
+  document.getElementById("ovTitle").textContent = `Все 5 ЖК: ${activeCity}`;
+  const ovEl = document.getElementById("overview");
+  ovEl.replaceChildren();
+  data.filter(d => d.city === activeCity).sort((a, b) => a.price - b.price).forEach(c => {
+    const cost = c.price * area;
+    const areaOk = (c.min === null || area >= c.min) && (c.max === null || area <= c.max);
+    let tagCls = "ok", tagTxt = "в бюджете";
+    if (!areaOk) { tagCls = "over"; tagTxt = "площадь не подходит"; }
+    else if (cost > budget + MAX_OVER_BUDGET) { tagCls = "over"; tagTxt = "дороже +2 млн"; }
+    else if (cost > budget) { tagCls = "warn"; tagTxt = `+${mln(cost - budget)}`; }
+
+    const item = document.createElement("div");
+    item.className = "ov-item";
+    item.innerHTML = `<div><div class="ov-name"></div><div class="ov-sub"></div></div><div class="ov-right"><div class="ov-cost"></div><div class="ov-tag ${tagCls}"></div></div>`;
+    item.querySelector(".ov-name").textContent = c.name;
+    item.querySelector(".ov-sub").textContent = `${c.cls} · ${rub(c.price)}/м²`;
+    item.querySelector(".ov-cost").textContent = mln(cost);
+    item.querySelector(".ov-tag").textContent = tagTxt;
+    ovEl.append(item);
+  });
+}
 
 document.querySelectorAll(".chip").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -483,12 +693,19 @@ form.addEventListener("submit", e => {
   const meta = document.getElementById("meta");
   out.replaceChildren();
   meta.textContent = `${city} · бюджет ${rub(budget)} · ${area} м²`;
+  renderSidebar(city, budget, area);
 
   const m = pick(city, budget, area);
   if (!m.length) {
+    const minNeeded = Math.min(...data
+      .filter(c => c.city === city && (c.min === null || area >= c.min) && (c.max === null || area <= c.max))
+      .map(c => c.price * area));
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = `В городе ${city} нет ЖК с квартирами площадью ${area} м². Попробуйте изменить площадь.`;
+    empty.innerHTML = `<h3>Подходящих ЖК не найдено</h3><p></p>`;
+    empty.querySelector("p").textContent = Number.isFinite(minNeeded)
+      ? `Для площади ${area} м² в городе ${city} нет вариантов в пределах ${rub(budget + MAX_OVER_BUDGET)} (с учётом +2 000 000 ₽). Минимальная стоимость в выборке: ~${rub(minNeeded)}.`
+      : `В городе ${city} нет ЖК с квартирами площадью ${area} м². Попробуйте изменить площадь.`;
     out.append(empty);
     return;
   }

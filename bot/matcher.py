@@ -61,14 +61,18 @@ def load(path: Path = DATA) -> list[Complex]:
         ]
 
 
+MAX_OVER_BUDGET = 2_000_000
+
+
 def pick(city: str, budget: float, area: float, k: int = 3,
-         data: list[Complex] | None = None) -> list[Match]:
+         data: list[Complex] | None = None,
+         max_over_budget: float = MAX_OVER_BUDGET) -> list[Match]:
     """Выбирает до k ЖК.
 
     1. В городе оставляем ЖК, где указанная площадь входит в диапазон (или диапазон неизвестен).
-    2. Сначала идут ЖК, где стоимость <= бюджета; среди них — ближайшие к бюджету
-       (бюджет используется максимально, т.е. лучший класс/локация за те же деньги).
-    3. Если таких меньше k — добиваем самыми «близкими сверху» и помечаем in_budget=False.
+    2. Исключаем ЖК, где стоимость превышает бюджет более чем на max_over_budget (2 000 000 ₽).
+    3. Сначала идут ЖК, где стоимость <= бюджета; среди них — ближайшие к бюджету.
+    4. Если таких меньше k — добиваем ближайшими сверху (в пределах +2 млн ₽) и помечаем in_budget=False.
     """
     data = data if data is not None else load()
     res = []
@@ -79,8 +83,10 @@ def pick(city: str, budget: float, area: float, k: int = 3,
             continue
         if c.max_area is not None and area > c.max_area:
             continue
-        ok = not c.area_est and c.min_area is not None
         cost = c.price_m2 * area
+        if cost > budget + max_over_budget:
+            continue
+        ok = not c.area_est and c.min_area is not None
         res.append(Match(c, cost, cost <= budget, ok))
     inside = sorted((m for m in res if m.in_budget), key=lambda m: budget - m.cost)
     above = sorted((m for m in res if not m.in_budget), key=lambda m: m.cost)
@@ -93,8 +99,9 @@ def fmt_rub(x: float) -> str:
 
 def format_matches(matches: list[Match], city: str, budget: float, area: float) -> str:
     if not matches:
-        return (f"В городе {city} нет ЖК, где бывают квартиры площадью {area:g} м². "
-                "Попробуйте другую площадь.")
+        return (f"В городе {city} нет подходящих ЖК для площади {area:g} м² "
+                f"в пределах бюджета {fmt_rub(budget)} (+2 000 000 ₽ допустимого превышения). "
+                "Увеличьте бюджет или уменьшите площадь.")
     lines = [f"Подбор: {city}, бюджет {fmt_rub(budget)}, площадь {area:g} м²\n"]
     for i, m in enumerate(matches, 1):
         c = m.cx
