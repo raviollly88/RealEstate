@@ -34,6 +34,7 @@
 Пользователь задаёт **город, бюджет и желаемую площадь** — система подбирает до 3 подходящих ЖК из таблицы и рассчитывает примерную стоимость квартиры (`цена «от» × площадь`). Если вариантов в бюджете меньше трёх, добавляются ближайшие по стоимости сверху с явной пометкой.
 
 - **Веб-версия (основная, работает локально без сервера):** [`web/index.html`](web/index.html) (исходник [`web/template.html`](web/template.html), сборщик [`web/build.py`](web/build.py))
+- **Скриншоты работы подборщика:** [`screenshots/`](screenshots/) ([Сочи](screenshots/sochi_30m_60m2.jpg), [Москва](screenshots/moscow_30m_60m2.jpg), [Санкт-Петербург](screenshots/spb_30m_60m2.jpg))
 - **Консольная версия:** [`bot/cli.py`](bot/cli.py)
 - **Telegram-бот:** [`bot/bot.py`](bot/bot.py) и общая логика [`bot/matcher.py`](bot/matcher.py)
 
@@ -55,6 +56,7 @@
 | `data/complexes.csv` | База из 15 ЖК с прямыми ссылками на источники |
 | `analysis/chart.py`, `analysis/price_chart.png` | Генератор графика и итоговая визуализация |
 | `web/index.html` | Готовый автономный веб-подборщик |
+| `screenshots/` | 3 скриншота работы веб-подборщика (Сочи, Москва, СПб) |
 | `web/template.html`, `web/build.py` | Шаблон страницы и скрипт вшивания CSV |
 | `bot/matcher.py`, `bot/cli.py`, `bot/bot.py` | Ядро подбора, CLI и Telegram-бот |
 | `TRACK_B.md` | Бизнес-описание AI-инструмента + 3 сценария/поста |
