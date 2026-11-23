@@ -64,23 +64,22 @@
 
 ## Быстрый запуск
 
-Самый простой способ посмотреть подборщик — **скачать [`web/index.html`](web/index.html)** (или весь репозиторий через `Code → Download ZIP`) и **открыть `web/index.html` двойным кликом в любом браузере**. Сервер, Python и установка зависимостей для этого не нужны.
+### Вариант 1. Без установки (в браузере)
+Скачайте [`web/index.html`](web/index.html) (или весь репозиторий через `Code → Download ZIP`) и **откройте `web/index.html` двойным кликом в любом браузере**. Сервер, Python и зависимости не нужны.
 
+### Вариант 2. Через терминал (Python)
 ```powershell
-# 1. Открыть веб-подборщик
-start web/index.html
+# 1. Запустить консольный подборщик
+python bot/cli.py Москва 100000000 40
 
 # 2. Пересобрать веб-страницу после правок CSV
 python web/build.py
 
-# 3. Запустить консольный подборщик
-python bot/cli.py Москва 100000000 40
-
-# 4. Пересобрать график
+# 3. Пересобрать график
 pip install matplotlib
 python analysis/chart.py
 
-# 5. Запустить Telegram-бота (требуется доступ к api.telegram.org)
+# 4. Запустить Telegram-бота (требуется доступ к api.telegram.org)
 pip install python-telegram-bot
 $env:BOT_TOKEN="ваш_токен"
 python bot/bot.py
